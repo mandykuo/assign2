@@ -119,7 +119,7 @@ if(y<0){
     
     //game over condition
     if(c<=x+50 && c>=x-50){
-      if(d<=y+50 && c>=y-50){
+      if(d<=y+50 && d>=y-50){
        gameState = GAME_OVER;
       } 
      }
