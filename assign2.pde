@@ -14,7 +14,7 @@ boolean rightPressed = false;
 
 
 int gameState;
-int b=floor(random(200));
+int b=0;
 int c;
 int d=floor(random(450));
 int e=floor(random(640));
@@ -35,15 +35,16 @@ void setup () {
   img4=loadImage("img/hp.png");
   img5=loadImage("img/bg1.png");
   img6=loadImage("img/bg2.png");
-  img7=loadImage("img/start1.png");
+  img7=loadImage("img/start1.png"); //light
   img8=loadImage("img/start2.png");
-  img9=loadImage("img/end1.png");
+  img9=loadImage("img/end1.png"); //light
   img10=loadImage("img/end2.png");
   gameState = GAME_START;
 }
 
 void draw() {
   
+//press button effect fighter movement
    if (upPressed) {
     y -= speed;
   }
@@ -57,25 +58,43 @@ void draw() {
     x += speed;
   }
 
-//boundary detection
-if(x>width-50){
-  x=width-50;
-}
-if(x<0){
-  x=0;
-}
-if(y>height-50){
-  y=height-50;
-}
-if(y<0){
-  y=0;
-}
+//fighter boundary detection
+  if(x>width-50){
+    x=width-50;
+  }
+  if(x<0){
+    x=0;
+  }
+  if(y>height-50){
+    y=height-50;
+  }
+  if(y<0){
+    y=0;
+  }
+    
   
-  
+//treasure boundary detection
+  if(e>width-50){
+    e=width-50;
+  }
+  if(e<0){
+    e=0;
+  }
+  if(f>height-50){
+    f=height-50;
+  }
+  if(f<0){
+    f=0;
+  }
+    
+    
+//background setup  
   background(0);
   image(img8,0,0);
-  
+
+//gameState setting
   switch (gameState){
+    
     case GAME_START:
     // mouse action
       if (mouseX >210 && mouseX < 450 && mouseY > 380 && mouseY < 430){
@@ -88,7 +107,7 @@ if(y<0){
           
         }
       }
-    break;
+    break; 
     
   
     case GAME_RUN:
@@ -110,21 +129,61 @@ if(y<0){
     //treasure
     image(img3,e,f);
     
+    
     //blood
-    rect(15,10,b,30);
+    rect(15,10,40+b,30);
     fill(255,0,0);
     
-    //hp
-    image(img4,10,10);
+     //blood length boundary
+    if(b>=160){
+      b=160;
+    }
     
-    //game over condition
-    if(c<=x+50 && c>=x-50){
+    
+    //lose blood
+     if(c<=x+50 && c>=x-50){
       if(d<=y+50 && d>=y-50){
-       gameState = GAME_OVER;
+       b-=40;
       } 
      }
- break;
+      
+    //add blood  
+    if(e<=x+40 && e>=x-40){
+      if(f<=y+40 && f>=y-40){
+      b+=20;
+      }
+    }
  
+   
+    
+    //game over condition
+   if(40+b<=0){
+      gameState = GAME_OVER;
+    }
+    
+   
+ 
+   //enemy and treasure disappear and reappear condition
+   if(c<=x+50 && c>=x-50){
+      if(d<=y+50 && d>=y-50){
+       c=0;
+       d=floor(random(480));
+      } 
+   }
+
+      
+   if(e<=x+50 && e>=x-50){
+      if(f<=y+50 && f>=y-50){
+      e=floor(random(640));
+      f=floor(random(480));
+    }
+   }
+   
+   
+   //hp bar
+    image(img4,10,10);
+  
+    break;  
      
     case GAME_OVER:
       
