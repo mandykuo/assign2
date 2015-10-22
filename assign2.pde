@@ -160,7 +160,7 @@ void draw() {
    if(40+b<=0){
       gameState = GAME_OVER;
     }
-    
+     
    
  
    //enemy and treasure disappear and reappear condition
@@ -172,16 +172,17 @@ void draw() {
    }
 
       
-   if(e<=x+50 && e>=x-50){
-      if(f<=y+50 && f>=y-50){
+   if(e<=x+40 && e>=x-40){
+      if(f<=y+40 && f>=y-40){
       e=floor(random(640));
       f=floor(random(480));
     }
    }
-   
+    
    
    //hp bar
     image(img4,10,10);
+    
   
     break;  
      
