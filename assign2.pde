@@ -1,10 +1,10 @@
-final int GAME_START = 0;
+final int GAME_START = 0; 
 final int GAME_RUN = 1;
 final int GAME_WIN = 2;
 final int GAME_OVER = 3;
 
-float x = 590;
-float y = 240;
+float fighterX = 590;
+float fighterY = 240;
 float speed = 5;
 
 boolean upPressed = false;
@@ -14,192 +14,192 @@ boolean rightPressed = false;
 
 
 int gameState;
-int b=0;
-int c;
-int d=floor(random(450));
-int e=floor(random(640));
-int f=floor(random(480));
-int z;
+int blood=0;
+int enemyX;
+int enemyY=floor(random(450));
+int treasureX=floor(random(640));
+int treasureY=floor(random(480));
+int backgroundX;
 
-PImage img1, img2, img3, img4, img5, img6, img7, img8, img9, img10;
+PImage enemy, fighter, treasure, hp_bar, bg1, bg2, start_light, start_dark, end_light, end_dark;
 
 
 void setup () {
-  
-  size(640,480);
-  
+
+  size(640, 480);
+
   //load images
-  img1=loadImage("img/enemy.png");
-  img2=loadImage("img/fighter.png");
-  img3=loadImage("img/treasure.png");
-  img4=loadImage("img/hp.png");
-  img5=loadImage("img/bg1.png");
-  img6=loadImage("img/bg2.png");
-  img7=loadImage("img/start1.png"); //light
-  img8=loadImage("img/start2.png");
-  img9=loadImage("img/end1.png"); //light
-  img10=loadImage("img/end2.png");
+  enemy=loadImage("img/enemy.png");
+  fighter=loadImage("img/fighter.png");
+  treasure=loadImage("img/treasure.png");
+  hp_bar=loadImage("img/hp.png");
+  bg1=loadImage("img/bg1.png");
+  bg2=loadImage("img/bg2.png");
+  start_light=loadImage("img/start1.png");
+  start_dark=loadImage("img/start2.png");
+  end_light=loadImage("img/end1.png");
+  end_dark=loadImage("img/end2.png");
   gameState = GAME_START;
 }
 
 void draw() {
-  
-//press button effect fighter movement
-   if (upPressed) {
-    y -= speed;
+
+  //press button effect fighter movement
+  if (upPressed) {
+    fighterY -= speed;
   }
   if (downPressed) {
-    y += speed;
+    fighterY += speed;
   }
   if (leftPressed) {
-    x -= speed;
+    fighterX -= speed;
   }
   if (rightPressed) {
-    x += speed;
+    fighterX += speed;
   }
 
-//fighter boundary detection
-  if(x>width-50){
-    x=width-50;
+  //fighter boundary detection
+  if (fighterX>width-50) {
+    fighterX=width-50;
   }
-  if(x<0){
-    x=0;
+  if (fighterX<0) {
+    fighterX=0;
   }
-  if(y>height-50){
-    y=height-50;
+  if (fighterY>height-50) {
+    fighterY=height-50;
   }
-  if(y<0){
-    y=0;
+  if (fighterY<0) {
+    fighterY=0;
   }
-    
-  
-//treasure boundary detection
-  if(e>width-50){
-    e=width-50;
+
+
+  //treasure boundary detection
+  if (treasureX>width-50) {
+    treasureX=width-50;
   }
-  if(e<0){
-    e=0;
+  if (treasureX<0) {
+    treasureX=0;
   }
-  if(f>height-50){
-    f=height-50;
+  if (treasureY>height-50) {
+    treasureY=height-50;
   }
-  if(f<0){
-    f=0;
+  if (treasureY<0) {
+    treasureY=0;
   }
-    
-    
-//background setup  
+
+
+  //background setup  
   background(0);
-  image(img8,0,0);
+  image(start_dark, 0, 0);
 
-//gameState setting
-  switch (gameState){
-    
-    case GAME_START:
+  //gameState setting
+  switch (gameState) {
+
+  case GAME_START:
     // mouse action
-      if (mouseX >210 && mouseX < 450 && mouseY > 380 && mouseY < 430){
-        if (mousePressed){
-          // click
-          gameState = GAME_RUN;
-        }else{
-          // hover
-          image(img7,0,0);
-          
-        }
+    if (mouseX >210 && mouseX < 450 && mouseY > 380 && mouseY < 430) {
+      if (mousePressed) {
+        // click
+        gameState = GAME_RUN;
+      } else {
+        // hover
+        image(start_light, 0, 0);
       }
+    }
     break; 
-    
-  
-    case GAME_RUN:
+
+
+  case GAME_RUN:
     //background
-    image(img5,z,0);
-    image(img6,z-640,0);
-    image(img5,z-1280,0);
-    z++;
-    z%=1280;
-    
+    image(bg1, backgroundX, 0);
+    image(bg2, backgroundX-640, 0);
+    image(bg1, backgroundX-1280, 0);
+    backgroundX++;
+    backgroundX%=1280;
+
     //enemy
-    image(img1,c,d);
-    c+=4;
-    c%=640;
+    image(enemy, enemyX, enemyY);
+    enemyX%=640;
+    enemyX+=4;
+    enemyY+=0.05*(fighterY-enemyY);
     
     //fighter
-    image(img2,x,y);
-    
+    image(fighter, fighterX, fighterY);
+
     //treasure
-    image(img3,e,f);
-    
-    
+    image(treasure, treasureX, treasureY);
+
+
     //blood
-    rect(15,10,40+b,30);
-    fill(255,0,0);
-    
-     //blood length boundary
-    if(b>=160){
-      b=160;
+    rect(15, 10, 40+blood, 30);
+    fill(255, 0, 0);
+
+    //blood length boundary
+    if (blood>=160) {
+      blood=160;
     }
-    
-    
+
+
     //lose blood
-     if(c<=x+50 && c>=x-50){
-      if(d<=y+50 && d>=y-50){
-       b-=40;
-      } 
-     }
-      
-    //add blood  
-    if(e<=x+40 && e>=x-40){
-      if(f<=y+40 && f>=y-40){
-      b+=20;
+    if (enemyX<=fighterX+50 && enemyX>=fighterX-50) {
+      if (enemyY<=fighterY+50 && enemyY>=fighterY-50) {
+        blood-=40;
       }
     }
- 
-   
-    
+
+    //add blood  
+    if (treasureX<=fighterX+40 && treasureX>=fighterX-40) {
+      if (treasureY<=fighterY+40 && treasureY>=fighterY-40) {
+        blood+=20;
+      }
+    }
+
+
     //game over condition
-   if(40+b<=0){
+    if (40+blood<=0) {
       gameState = GAME_OVER;
     }
-     
-   
- 
-   //enemy and treasure disappear and reappear condition
-   if(c<=x+50 && c>=x-50){
-      if(d<=y+50 && d>=y-50){
-       c=0;
-       d=floor(random(480));
-      } 
-   }
 
-      
-   if(e<=x+40 && e>=x-40){
-      if(f<=y+40 && f>=y-40){
-      e=floor(random(640));
-      f=floor(random(480));
-    }
-   }
-    
-   
-   //hp bar
-    image(img4,10,10);
-    
-  
-    break;  
-     
-    case GAME_OVER:
-      
-      // mouse action
-      if (mouseX >210 && mouseX < 420 && mouseY > 300 && mouseY < 350){
-        if (mousePressed){
-          // click
-          gameState = GAME_START;
-        }else{
-          // hover
-          image(img9,0,0);
-        }
+
+    //enemy and treasure disappear and reappear condition
+    if (enemyX<=fighterX+50 && enemyX>=fighterX-50) {
+      if (enemyY<=fighterY+50 && enemyY>=fighterY-50) {
+        enemyX=0;
+        enemyY=floor(random(480));
       }
-      image(img10,0,0);
-  
+    }
+
+
+    if (treasureX<=fighterX+40 && treasureX>=fighterX-40) {
+      if (treasureY<=fighterY+40 && treasureY>=fighterY-40) {
+        treasureX=floor(random(640));
+        treasureY=floor(random(480));
+      }
+    }
+
+
+    //hp bar
+    image(hp_bar, 10, 10);
+
+    break;  
+
+  case GAME_WIN:
+    break;
+
+  case GAME_OVER:
+    image(end_dark, 0, 0);
+    // mouse action
+    if (mouseX >210 && mouseX < 420 && mouseY > 300 && mouseY < 350) {
+      if (mousePressed) {
+        // click
+        gameState = GAME_RUN;
+        blood=0;
+      } else {
+        // hover
+        image(end_light, 0, 0);
+      }
+    }
+    break;
   }
 }
 
@@ -208,18 +208,18 @@ void draw() {
 void keyPressed() {
   if (key == CODED) {  
     switch (keyCode) {
-      case UP:
-        upPressed = true;
-        break;
-      case DOWN:
-        downPressed = true;
-        break;
-      case LEFT:
-        leftPressed = true;
-        break;
-      case RIGHT:
-        rightPressed = true;
-        break;
+    case UP:
+      upPressed = true;
+      break;
+    case DOWN:
+      downPressed = true;
+      break;
+    case LEFT:
+      leftPressed = true;
+      break;
+    case RIGHT:
+      rightPressed = true;
+      break;
     }
   }
 }
@@ -227,18 +227,18 @@ void keyPressed() {
 void keyReleased() {
   if (key == CODED) {
     switch (keyCode) {
-      case UP:
-        upPressed = false;
-        break;
-      case DOWN:
-        downPressed = false;
-        break;
-      case LEFT:
-        leftPressed = false;
-        break;
-      case RIGHT:
-        rightPressed = false;
-        break;
+    case UP:
+      upPressed = false;
+      break;
+    case DOWN:
+      downPressed = false;
+      break;
+    case LEFT:
+      leftPressed = false;
+      break;
+    case RIGHT:
+      rightPressed = false;
+      break;
     }
   }
 }
